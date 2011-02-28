@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Date;
 
+import com.facebook.android.Facebook;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -15,7 +18,7 @@ import android.widget.Toast;
 
 public class AndroidFacebookSample extends Activity {
 
-	private static final String FACEBOOK_APPID = "PUT YOUR FACEBOOK APPID HERE";
+	private static final String FACEBOOK_APPID = "PUT YOUR FACEBOOK APP ID HERE";
 	private static final String FACEBOOK_PERMISSION = "publish_stream";
 	private static final String TAG = "FacebookSample";
 	private static final String MSG = "Message from FacebookSample";
@@ -38,7 +41,7 @@ public class AndroidFacebookSample extends Activity {
         
 
         loginStatus = (TextView)findViewById(R.id.login_status);
-        Button tweet = (Button) findViewById(R.id.btn_tweet);
+        Button tweet = (Button) findViewById(R.id.btn_post);
         Button clearCredentials = (Button) findViewById(R.id.btn_clear_credentials);
         
         tweet.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +64,12 @@ public class AndroidFacebookSample extends Activity {
 	}
 	
 	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		this.facebookConnector.getFacebook().authorizeCallback(requestCode, resultCode, data);
+	}
+	
+	
+	@Override
 	protected void onResume() {
 		super.onResume();
 		updateLoginStatus();
@@ -76,6 +85,7 @@ public class AndroidFacebookSample extends Activity {
 	}	
 	
 	public void postMessage() {
+		
 		if (facebookConnector.getFacebook().isSessionValid()) {
 			postMessageInThread();
 		} else {

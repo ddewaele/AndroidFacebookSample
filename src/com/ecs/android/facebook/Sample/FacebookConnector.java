@@ -38,11 +38,7 @@ public class FacebookConnector {
 	}
 	
 	public void login() {
-        if (facebook.isSessionValid()) {
-            SessionEvents.onLogoutBegin();
-            AsyncFacebookRunner asyncRunner = new AsyncFacebookRunner(facebook);
-            asyncRunner.logout(this.context, new LogoutRequestListener());
-        } else {
+        if (!facebook.isSessionValid()) {
             facebook.authorize(this.activity, this.permissions,new LoginDialogListener());
         }
     }
